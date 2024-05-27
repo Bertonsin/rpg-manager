@@ -4,9 +4,11 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { NoteService } from './note.service';
@@ -14,31 +16,37 @@ import { NoteService } from './note.service';
 @Controller()
 export class NoteController {
   constructor(private NoteService: NoteService) {}
+
   @Get()
+  @HttpCode(HttpStatus.OK)
   async getNoteList() {
     return await this.NoteService.findMany();
   }
 
   @Get('/:id')
+  @HttpCode(HttpStatus.OK)
   async getNote(@Param() params: { id: string }) {
     return await this.NoteService.findOne(params.id);
   }
 
   @Post()
-  async createNote(@Body() body: Prisma.NoteCreateInput) {
+  @HttpCode(HttpStatus.CREATED)
+  async createNote(@Body() body: Prisma.NoteUncheckedCreateInput) {
     return await this.NoteService.create(body);
   }
 
-  @Put('/:id')
+  @Patch('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async updateNote(
     @Body() body: Prisma.NoteUpdateInput,
     @Param() params: { id: string },
   ) {
-    await this.NoteService.updateNote(body, params.id);
+    await this.NoteService.update(body, params.id);
   }
 
   @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteNote(@Param() params: { id: string }) {
-    await this.NoteService.deleteNote(params.id);
+    await this.NoteService.delete(params.id);
   }
 }
