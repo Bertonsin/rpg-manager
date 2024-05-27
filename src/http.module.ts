@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { NoteModule } from './note.module';
+import { NoteModule } from './note/note.module';
 import { SessionModule } from './session/session.module';
 
 @Module({
