@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { prisma } from 'src/prisma/prisma-client';
 
@@ -11,11 +11,13 @@ export class SessionService {
   }
 
   async findOne(id: string) {
-    return await prisma.session.findUnique({
+    const session = await prisma.session.findUnique({
       where: {
         id,
       },
     });
+    if (!session) throw new NotFoundException();
+    return session;
   }
 
   async create(body: Prisma.SessionUncheckedCreateInput) {
@@ -26,6 +28,12 @@ export class SessionService {
   }
 
   async update(body: Prisma.SessionUncheckedUpdateInput, id: string) {
+    const session = await prisma.session.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!session) throw new NotFoundException();
     await prisma.session.update({
       data: body,
       where: {
@@ -35,6 +43,12 @@ export class SessionService {
   }
 
   async delete(id: string) {
+    const session = await prisma.session.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!session) throw new NotFoundException();
     await prisma.session.update({
       data: { deleted_at: new Date() },
       where: {

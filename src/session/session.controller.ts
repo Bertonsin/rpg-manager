@@ -33,6 +33,7 @@ export class SessionController {
   }
 
   @Patch('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async updateSession(
     @Body() body: Prisma.SessionUncheckedUpdateInput,
     @Param() params: { id: string },
@@ -41,6 +42,7 @@ export class SessionController {
   }
 
   @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteSession(@Param() params: { id: string }) {
     await this.sessionService.delete(params.id);
   }
