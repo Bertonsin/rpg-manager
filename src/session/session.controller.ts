@@ -12,7 +12,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { SessionService } from './session.service';
 
-@Controller()
+@Controller('/sessions')
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
