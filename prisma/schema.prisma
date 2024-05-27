@@ -19,31 +19,34 @@ model Story {
   description String
   author      String    @unique()
   created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt()
+  updated_at  DateTime? @updatedAt()
+  deleted_at  DateTime?
   sessions    Session[]
 
   @@map("stories")
 }
 
 model Session {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   name       String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
-  story_id   String   @unique()
-  story      Story    @relation(fields: [story_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt()
+  deleted_at DateTime?
+  story_id   String    @unique()
+  story      Story     @relation(fields: [story_id], references: [id])
   notes      Note[]
 
   @@map("sessions")
 }
 
 model Note {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   content    String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
-  session_id String   @unique()
-  session    Session  @relation(fields: [session_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt()
+  deleted_at DateTime?
+  session_id String    @unique()
+  session    Session   @relation(fields: [session_id], references: [id])
 
   @@map("notes")
 }
