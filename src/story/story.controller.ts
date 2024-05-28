@@ -10,10 +10,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { StoryService } from './story.service';
 
 @Controller('/stories')
+@ApiTags('Stories')
 export class StoryController {
   constructor(private StoryService: StoryService) {}
 
@@ -30,6 +32,17 @@ export class StoryController {
   }
 
   @Post()
+  @ApiBody({
+    type: 'application/json',
+    schema: {
+      type: 'object',
+      example: {
+        name: 'Story example',
+        description: 'Story description',
+        session_id: '1',
+      },
+    },
+  })
   @HttpCode(HttpStatus.CREATED)
   async createStory(@Body() body: Prisma.StoryUncheckedCreateInput) {
     return await this.StoryService.create(body);

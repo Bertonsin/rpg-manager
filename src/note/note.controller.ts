@@ -10,10 +10,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { NoteService } from './note.service';
 
 @Controller('/notes')
+@ApiTags('Notes')
 export class NoteController {
   constructor(private NoteService: NoteService) {}
 
@@ -30,6 +32,16 @@ export class NoteController {
   }
 
   @Post()
+  @ApiBody({
+    type: 'application/json',
+    schema: {
+      type: 'object',
+      example: {
+        content: 'Note example',
+        story_id: '1',
+      },
+    },
+  })
   @HttpCode(HttpStatus.CREATED)
   async createNote(@Body() body: Prisma.NoteUncheckedCreateInput) {
     return await this.NoteService.create(body);

@@ -9,10 +9,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { SessionService } from './session.service';
 
 @Controller('/sessions')
+@ApiTags('Sessions')
 export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
@@ -27,6 +29,16 @@ export class SessionController {
   }
 
   @Post()
+  @ApiBody({
+    type: 'application/json',
+    schema: {
+      type: 'object',
+      example: {
+        name: 'Session example',
+        story_id: '1',
+      },
+    },
+  })
   @HttpCode(HttpStatus.CREATED)
   async createSession(@Body() body: Prisma.SessionUncheckedCreateInput) {
     return await this.sessionService.create(body);
